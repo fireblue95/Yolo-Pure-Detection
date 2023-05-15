@@ -12,7 +12,7 @@ class Yolov8_pure:
 
         self.win_w, self.win_h = (1280, 720)
 
-        self.names = ['success', 'dropping']
+        self.names = ['obj1', 'obj2']
 
         # -----------------------------------------------------------------
         # load model
