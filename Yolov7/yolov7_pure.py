@@ -11,7 +11,7 @@ filterwarnings('ignore')
 
 import numpy as np
 
-class SlagAI:
+class Yolov7_pure:
     def __init__(self, yolov7_conf: float = 0.5):
         
         # -----------------------------------------------------------------
@@ -152,5 +152,5 @@ class SlagAI:
     
 
 if __name__ == "__main__":
-    app: SlagAI = SlagAI()
+    app: Yolov7_pure = Yolov7_pure()
     app.detect_objects_realtime()
