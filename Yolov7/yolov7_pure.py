@@ -125,7 +125,7 @@ class Yolov7_pure:
     @torch.no_grad()
     def detect_objects_realtime(self):
         # Start the video capture
-        #cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0)
         
         while True:
             success, frame = cap.read()
