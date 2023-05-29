@@ -176,11 +176,7 @@ class Yolov7:
 
         # Configurations ------------------------------------------------------------------------------------------------
 
-    def draw_detections(self, image, class_names, boxes, scores, class_ids, mask_alpha=0.3):
-        rng = np.random.default_rng(3)
-
-        colors = rng.uniform(0, 255, size=(len(class_names), 3))
-
+    def draw_detections(self, image, boxes, scores, class_ids, mask_alpha=0.4):
         mask_img = image.copy()
         det_img = image.copy()
 
@@ -190,7 +186,7 @@ class Yolov7:
 
         # Draw bounding boxes and labels of detections
         for box, score, class_id in zip(boxes, scores, class_ids):
-            color = colors[class_id]
+            color = self.colors[class_id]
 
             x1, y1, x2, y2 = box.astype(int)
 
@@ -200,20 +196,25 @@ class Yolov7:
             # Draw fill rectangle in mask image
             cv2.rectangle(mask_img, (x1, y1), (x2, y2), color, -1)
 
-            label = class_names[class_id]
+            label = self.names[class_id]
             caption = f'{label} {int(score * 100)}%'
             (tw, th), _ = cv2.getTextSize(text=caption, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                                         fontScale=size, thickness=text_thickness)
             th = int(th * 1.2)
 
-            cv2.rectangle(det_img, (x1, y1),
-                        (x1 + tw, y1 - th), color, -1)
-            cv2.rectangle(mask_img, (x1, y1),
-                        (x1 + tw, y1 - th), color, -1)
-            cv2.putText(det_img, caption, (x1, y1),
-                        cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
+            offset = 12
 
-            cv2.putText(mask_img, caption, (x1, y1),
+            box_ymax = max(y1, offset)
+            box_ymin = max(box_ymax - th, 2)
+
+            cv2.rectangle(det_img, (x1, box_ymin),
+                        (x1 + tw, box_ymax), color, -1)
+            cv2.rectangle(mask_img, (x1, box_ymin),
+                        (x1 + tw, box_ymax), color, -1)
+            
+            cv2.putText(det_img, caption, (x1, box_ymax),
+                        cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
+            cv2.putText(mask_img, caption, (x1, box_ymax),
                         cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
 
         return cv2.addWeighted(mask_img, mask_alpha, det_img, 1 - mask_alpha, 0)
