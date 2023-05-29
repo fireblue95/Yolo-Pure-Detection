@@ -1,3 +1,8 @@
+"""
+Use this convert pt or onnx model to TRT model.
+URL: https://github.com/fireblue95/YOLOv8-TensorRT
+"""
+
 import cv2
 import argparse
 import numpy as np
