@@ -53,14 +53,19 @@ class Yolov8_pure:
                                         fontScale=size, thickness=text_thickness)
             th = int(th * 1.2)
 
-            cv2.rectangle(det_img, (x1, y1),
-                        (x1 + tw, y1 - th), color, -1)
-            cv2.rectangle(mask_img, (x1, y1),
-                        (x1 + tw, y1 - th), color, -1)
-            cv2.putText(det_img, caption, (x1, y1),
-                        cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
+            offset = 12
 
-            cv2.putText(mask_img, caption, (x1, y1),
+            box_ymax = max(y1, offset)
+            box_ymin = max(box_ymax - th, 2)
+
+            cv2.rectangle(det_img, (x1, box_ymin),
+                        (x1 + tw, box_ymax), color, -1)
+            cv2.rectangle(mask_img, (x1, box_ymin),
+                        (x1 + tw, box_ymax), color, -1)
+            
+            cv2.putText(det_img, caption, (x1, box_ymax),
+                        cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
+            cv2.putText(mask_img, caption, (x1, box_ymax),
                         cv2.FONT_HERSHEY_SIMPLEX, size, (255, 255, 255), text_thickness, cv2.LINE_AA)
 
         return cv2.addWeighted(mask_img, mask_alpha, det_img, 1 - mask_alpha, 0)
