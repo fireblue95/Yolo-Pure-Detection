@@ -45,7 +45,7 @@ class Yolov8_TRT_pure:
 
         blob_rgb = cv2.cvtColor(blob_bgr, cv2.COLOR_BGR2RGB)
 
-        tensor = blob(blob_frame, return_seg=False)
+        tensor = blob(blob_rgb, return_seg=False)
         dwdh = np.array(dwdh * 2, dtype=np.float32)
         tensor = np.ascontiguousarray(tensor)
 
