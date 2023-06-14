@@ -41,7 +41,9 @@ class Yolov8_TRT_pure:
         self.colors = np.random.default_rng(3).uniform(0, 255, size=(len(self.names), 3))
 
     def detector(self, drawed_img):
-        blob_frame, ratio, dwdh = letterbox(drawed_img, (self.W, self.H))
+        blob_bgr, ratio, dwdh = letterbox(drawed_img, (self.W, self.H))
+
+        blob_rgb = cv2.cvtColor(blob_bgr, cv2.COLOR_BGR2RGB)
 
         tensor = blob(blob_frame, return_seg=False)
         dwdh = np.array(dwdh * 2, dtype=np.float32)
